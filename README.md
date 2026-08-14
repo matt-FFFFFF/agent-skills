@@ -1,4 +1,4 @@
-# claude-skills
+# agent-skills
 
 Personal skills marketplace hosting two skills:
 
@@ -16,10 +16,10 @@ Works for Claude Code, opencode, Cursor, and 70+ other agents — the CLI reads
 this repo's `.claude-plugin/marketplace.json` directly.
 
 ```bash
-npx skills add matt-FFFFFF/claude-skills          # install to every detected agent
-npx skills add matt-FFFFFF/claude-skills -a opencode      # opencode only
-npx skills add matt-FFFFFF/claude-skills -a claude-code    # Claude Code only
-npx skills add matt-FFFFFF/claude-skills -g                # global instead of project scope
+npx skills add matt-FFFFFF/agent-skills          # install to every detected agent
+npx skills add matt-FFFFFF/agent-skills -a opencode      # opencode only
+npx skills add matt-FFFFFF/agent-skills -a claude-code    # Claude Code only
+npx skills add matt-FFFFFF/agent-skills -g                # global instead of project scope
 ```
 
 Add `-s pr-flow` or `-s terraform-test` to install just one skill. `bunx` works
@@ -34,7 +34,7 @@ npx skills update
 ### Claude Code native — plugin marketplace
 
 ```
-/plugin marketplace add matt-FFFFFF/claude-skills
+/plugin marketplace add matt-FFFFFF/agent-skills
 /plugin install pr-flow@matt-ffffff-skills
 /plugin install terraform-test@matt-ffffff-skills
 ```
@@ -51,9 +51,9 @@ opencode also scans `.claude/skills/` and `.agents/skills/` directly, so a
 plain clone + symlink works without any installer:
 
 ```bash
-git clone https://github.com/matt-FFFFFF/claude-skills ~/src/claude-skills
-ln -s ~/src/claude-skills/pr-flow/skills/pr-flow ~/.config/opencode/skills/pr-flow
-ln -s ~/src/claude-skills/terraform-test/skills/terraform-test ~/.config/opencode/skills/terraform-test
+git clone https://github.com/matt-FFFFFF/agent-skills ~/src/agent-skills
+ln -s ~/src/agent-skills/pr-flow/skills/pr-flow ~/.config/opencode/skills/pr-flow
+ln -s ~/src/agent-skills/terraform-test/skills/terraform-test ~/.config/opencode/skills/terraform-test
 ```
 
 ## Layout
