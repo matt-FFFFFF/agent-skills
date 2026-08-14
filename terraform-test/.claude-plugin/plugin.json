@@ -1,0 +1,10 @@
+{
+  "name": "terraform-test",
+  "displayName": "Terraform Test",
+  "description": "Write and run Terraform tests using the built-in .tftest.hcl framework.",
+  "version": "1.0.0",
+  "author": {
+    "name": "matt-FFFFFF"
+  },
+  "keywords": ["terraform", "testing", "tftest"]
+}

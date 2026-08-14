@@ -1,0 +1,22 @@
+{
+  "name": "matt-ffffff-skills",
+  "owner": {
+    "name": "matt-FFFFFF",
+    "url": "https://github.com/matt-FFFFFF"
+  },
+  "description": "Personal Claude Code skills marketplace",
+  "plugins": [
+    {
+      "name": "pr-flow",
+      "source": "./pr-flow",
+      "description": "End-to-end pull-request workflow: create, wait on CI, fix failures, drive Copilot review to a clean state.",
+      "version": "1.0.0"
+    },
+    {
+      "name": "terraform-test",
+      "source": "./terraform-test",
+      "description": "Write and run Terraform tests using the built-in .tftest.hcl framework.",
+      "version": "1.0.0"
+    }
+  ]
+}

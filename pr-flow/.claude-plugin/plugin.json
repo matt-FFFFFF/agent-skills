@@ -1,0 +1,11 @@
+{
+  "name": "pr-flow",
+  "displayName": "PR Flow",
+  "description": "End-to-end pull-request workflow: create, wait on CI, fix failures, drive Copilot review to a clean state.",
+  "version": "1.0.0",
+  "author": {
+    "name": "matt-FFFFFF"
+  },
+  "license": "MIT",
+  "keywords": ["github", "pull-request", "ci", "copilot-review"]
+}
