@@ -162,6 +162,8 @@ in different surfaces — use the one each surface expects):
 | Surface                           | Login string                         |
 | --------------------------------- | ------------------------------------ |
 | Display login on submitted review | `copilot-pull-request-reviewer[bot]` |
+| REST inline comments (`pulls/{n}/comments`) | `Copilot`                  |
+| GraphQL thread comment author     | `copilot-pull-request-reviewer`      |
 | GraphQL `botLogins` argument      | `copilot-pull-request-reviewer`      |
 | `requested_reviewers[].login`     | `Copilot`                            |
 | `gh pr create --reviewer ...`     | `Copilot` (works on create only)     |
@@ -180,27 +182,35 @@ COPILOT_BOT_LOGIN='copilot-pull-request-reviewer[bot]'
 
 for i in $(seq 1 40); do
   state=$(gh api "repos/$OWNER/$REPO/pulls/$NUMBER/reviews" \
-    --jq --arg u "$COPILOT_BOT_LOGIN" \
+    | jq -r --arg u "$COPILOT_BOT_LOGIN" \
       '[.[] | select(.user.login==$u)][-1].state // "PENDING"')
   [[ "$state" != "PENDING" ]] && break
   sleep 15
 done
 ```
 
+`gh api --jq` does not accept `--arg`; pipe into `jq --arg` instead.
+Copilot submits its review as `COMMENTED` even when the overview says
+"Approval recommended" — never wait for `APPROVED`. Treat "no open
+Copilot findings" as clean.
+
 Fetch comments + threads:
 
 ```bash
-# Inline review comments (filter to Copilot)
+# Inline review comments. NOTE: these are authored by "Copilot" (no
+# [bot] suffix), not by the submitted-review login. Match both.
 gh api "repos/$OWNER/$REPO/pulls/$NUMBER/comments" \
-  --jq --arg u "$COPILOT_BOT_LOGIN" \
-    '.[] | select(.user.login==$u) | {id, path, line, body, in_reply_to_id}'
+  | jq --arg u "$COPILOT_BOT_LOGIN" \
+    '.[] | select(.user.login=="Copilot" or .user.login==$u)
+         | {id, path, line, body, in_reply_to_id}'
 
-# Top-level review summary
+# Top-level review summary (overview body linking the inline findings)
 gh api "repos/$OWNER/$REPO/pulls/$NUMBER/reviews" \
-  --jq --arg u "$COPILOT_BOT_LOGIN" \
+  | jq --arg u "$COPILOT_BOT_LOGIN" \
     '.[] | select(.user.login==$u) | {id, state, body}'
 
-# Thread IDs (needed for resolve)
+# Thread IDs (needed for resolve). Copilot's comment author.login here
+# is "copilot-pull-request-reviewer" (no [bot] suffix).
 gh api graphql -f query='
 query($owner:String!,$repo:String!,$num:Int!){
   repository(owner:$owner,name:$repo){
@@ -271,13 +281,6 @@ After all threads handled and fixes pushed:
 
 ```bash
 # Wait for the new commit's CI to go green first (loop §2 again).
-# Then re-request
-gh api -X POST .../requested_reviewers \
-  -f 'reviewers[]=copilot-pull-request-reviewer[bot]'
-```
-
-```bash
-# Wait for the new commit's CI to go green first (loop §2 again).
 # Then re-request — MUST use the GraphQL botLogins path from §3,
 # the REST POST silently no-ops once Copilot has reviewed.
 gh api graphql -f query='
@@ -296,8 +299,8 @@ gh api "repos/$OWNER/$REPO/issues/$NUMBER/timeline" \
 
 Loop back to §4. Exit conditions:
 
-- New review is `APPROVED` or has no actionable comments (only
-  praise / nits already dismissed) → done.
+- New review is `COMMENTED` with no open findings (no unresolved
+  Copilot threads; only praise / nits already dismissed) → done.
 - Same comment re-emerges after a fix the bot keeps rejecting → stop
   and surface to the user; the bot is in a loop and a human has to
   break it.
@@ -332,6 +335,8 @@ delegated it.
   origin and CI re-ran.
 - If a check requires a secret you don't have access to, stop and
   ask — don't paper over it.
+- If the user says to skip re-review or merge once CI is green,
+  honour it and do not re-request Copilot.
 
 ## Repo conventions to honour
 
