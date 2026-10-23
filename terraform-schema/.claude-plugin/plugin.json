@@ -1,0 +1,10 @@
+{
+  "name": "terraform-schema",
+  "displayName": "Terraform Schema",
+  "description": "Query Terraform/OpenTofu provider and module schemas with tfpluginschema and tfmoduleschema instead of documentation sites.",
+  "version": "1.0.0",
+  "author": {
+    "name": "matt-FFFFFF"
+  },
+  "keywords": ["terraform", "opentofu", "schema", "provider", "module"]
+}

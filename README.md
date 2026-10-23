@@ -1,12 +1,16 @@
 # agent-skills
 
-Personal skills marketplace hosting two skills:
+Personal skills marketplace hosting three skills:
 
 - **[pr-flow](pr-flow)** — end-to-end pull-request workflow: create a PR with a
   Conventional-Commits title, wait for CI, fix failures in a loop, drive a
   GitHub Copilot review to a clean state.
 - **[terraform-test](terraform-test)** — write and run Terraform tests using
   the built-in `.tftest.hcl` framework (unit + integration).
+- **[terraform-schema](terraform-schema)** — look up provider and
+  module schemas with [`tfpluginschema`](https://github.com/matt-FFFFFF/tfpluginschema)
+  and [`tfmoduleschema`](https://github.com/matt-FFFFFF/tfmoduleschema) instead
+  of documentation sites when writing Terraform.
 
 ## Install
 
@@ -22,7 +26,8 @@ npx skills add matt-FFFFFF/agent-skills -a claude-code    # Claude Code only
 npx skills add matt-FFFFFF/agent-skills -g                # global instead of project scope
 ```
 
-Add `-s pr-flow` or `-s terraform-test` to install just one skill. `bunx` works
+Add `-s pr-flow`, `-s terraform-test` or `-s terraform-schema` to install
+just one skill. `bunx` works
 the same in place of `npx`.
 
 Update later with:
@@ -37,6 +42,7 @@ npx skills update
 /plugin marketplace add matt-FFFFFF/agent-skills
 /plugin install pr-flow@matt-ffffff-skills
 /plugin install terraform-test@matt-ffffff-skills
+/plugin install terraform-schema@matt-ffffff-skills
 ```
 
 Update later with:
@@ -54,6 +60,7 @@ plain clone + symlink works without any installer:
 git clone https://github.com/matt-FFFFFF/agent-skills ~/src/agent-skills
 ln -s ~/src/agent-skills/pr-flow/skills/pr-flow ~/.config/opencode/skills/pr-flow
 ln -s ~/src/agent-skills/terraform-test/skills/terraform-test ~/.config/opencode/skills/terraform-test
+ln -s ~/src/agent-skills/terraform-schema/skills/terraform-schema ~/.config/opencode/skills/terraform-schema
 ```
 
 ## Layout

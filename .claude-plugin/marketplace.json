@@ -17,6 +17,12 @@
       "source": "./terraform-test",
       "description": "Write and run Terraform tests using the built-in .tftest.hcl framework.",
       "version": "1.0.0"
+    },
+    {
+      "name": "terraform-schema",
+      "source": "./terraform-schema",
+      "description": "Query Terraform/OpenTofu provider and module schemas with tfpluginschema and tfmoduleschema instead of documentation sites.",
+      "version": "1.0.0"
     }
   ]
 }
